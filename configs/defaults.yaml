@@ -1,0 +1,73 @@
+runtime:
+  # Pin every model to this thread budget so wall-clock is like-for-like.
+  # GBMs saturate 16 threads on histogram kernels; PyTorch CPU tabular DL
+  # does not. Leaving both at library defaults confounds runtime with
+  # parallelization efficiency. Set to null to use each library's default.
+  # 8 matches typical physical-core counts on modern desktops/laptops.
+  n_threads: 8
+
+cv:
+  n_folds: 3
+  holdout_frac: 0.2
+  min_train_frac: 0.2
+  es_frac: 0.1
+
+tuning:
+  n_trials: 25
+  seed: 0
+
+analysis:
+  shap_subsample: 10000
+  shap_seed: 0
+
+bootstrap:
+  block_size: 2000
+  n_boot: 500
+  alpha: 0.05
+  seed: 0
+
+calibration:
+  n_bins: 20
+
+# Which models to run when experiment.py is invoked without --models.
+# Comment out entries to skip. DL models require Phase 2 env update.
+models_to_run:
+  - lightgbm
+  - xgboost
+  - catboost
+  # - ft_transformer
+  # - tabnet
+  # - node
+
+models:
+  lightgbm:
+    learning_rate: 0.05
+    num_leaves: 127
+    min_data_in_leaf: 100
+    feature_fraction: 0.8
+    bagging_fraction: 0.8
+    bagging_freq: 5
+  xgboost:
+    learning_rate: 0.05
+    max_depth: 8
+    subsample: 0.8
+    colsample_bytree: 0.8
+    tree_method: hist
+  catboost:
+    learning_rate: 0.05
+    depth: 8
+    l2_leaf_reg: 3.0
+    iterations: 5000
+  # ft_transformer uses rtdl-revisiting-models with paper defaults
+  # (n_blocks=3, d_block=192, attention_n_heads=8). Override here with
+  # the rtdl kwarg names if you want to change them.
+  ft_transformer: {}
+  tabnet:
+    n_d: 16
+    n_a: 16
+    n_steps: 3
+    gamma: 1.3
+  node:
+    num_layers: 1
+    num_trees: 256
+    depth: 4

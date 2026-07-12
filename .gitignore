@@ -1,0 +1,33 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.env
+.venv/
+env/
+venv/
+.vscode/
+.idea/
+
+# Datasets — regenerate from Kaggle
+data/raw/
+data/interim/
+data/processed/
+
+# Large regenerable artifacts (report.md + tables + plots stay in the repo)
+results/holdout_scores.npz
+saved_models/
+lightning_logs/
+catboost_info/
+.pt_tmp/
+
+# Files from other research that ended up in this directory by accident
+VIX_project*.yml
+
+mlruns/
+wandb/
+*.log
+
+*.pkl
+*.parquet
+*.feather
+*.zip

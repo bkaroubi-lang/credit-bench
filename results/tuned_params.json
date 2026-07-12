@@ -1,0 +1,21 @@
+{
+  "lightgbm": {
+    "learning_rate": 0.010419504178821214,
+    "num_leaves": 225,
+    "min_data_in_leaf": 30,
+    "feature_fraction": 0.5065244725322233,
+    "bagging_fraction": 0.9969596088199147
+  },
+  "xgboost": {
+    "learning_rate": 0.010138042733995918,
+    "max_depth": 9,
+    "subsample": 0.6587618943574862,
+    "colsample_bytree": 0.7099040717736856,
+    "min_child_weight": 2
+  },
+  "catboost": {
+    "learning_rate": 0.026216309731590948,
+    "depth": 8,
+    "l2_leaf_reg": 2.9591534383762466
+  }
+}

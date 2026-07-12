@@ -1,0 +1,29 @@
+name: credit-bench
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas>=2.2
+  - polars>=1.0
+  - numpy>=1.26,<2.0
+  - scikit-learn>=1.5
+  - scipy>=1.13
+  - matplotlib>=3.9
+  - seaborn>=0.13
+  - jupyterlab
+  - pyyaml
+  - tqdm
+  - pyarrow
+  - pip
+  - pip:
+      - xgboost>=2.1
+      - lightgbm>=4.5
+      - catboost>=1.2
+      - shap>=0.46
+      - optuna>=4.0
+      - tabulate
+      - kaggle
+      # ----- Phase 2 (tabular DL). CPU-only wheels. -----
+      - --extra-index-url https://download.pytorch.org/whl/cpu
+      - torch>=2.4
+      - pytorch-tabular>=1.1
