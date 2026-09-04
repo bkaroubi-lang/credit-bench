@@ -1,0 +1,46 @@
+# uv project config (replaces conda/environment.yml).
+# Create the env:   uv sync           (uv fetches Python 3.11 automatically)
+# Run everything:   uv run python run_all.py
+# torch is pulled from the CPU wheel index (mirrors the old --extra-index-url).
+# For CUDA/ROCm instead, point the pytorch index url at the matching build.
+# environment.yml is kept as a conda fallback but uv is the primary path.
+[project]
+name = "credit-bench"
+version = "0.1.0"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pandas>=2.2",
+    "polars>=1.0",
+    "numpy>=1.26,<2.0",
+    "scikit-learn>=1.5",
+    "scipy>=1.13",
+    "matplotlib>=3.9",
+    "seaborn>=0.13",
+    "jupyterlab",
+    "pyyaml",
+    "tqdm",
+    "pyarrow",
+    "xgboost>=2.1",
+    "lightgbm>=4.5",
+    "catboost>=1.2",
+    "shap>=0.46",
+    "optuna>=4.0",
+    "tabulate",
+    "kaggle",
+    "torch>=2.4",
+    "pytorch-tabular>=1.1",
+]
+
+[tool.uv]
+# Benchmark project run via run_all.py / python -m src.*; not an installable package.
+package = false
+
+# Pull torch from the CPU-only wheel index (equivalent to the old
+# `--extra-index-url https://download.pytorch.org/whl/cpu`).
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }

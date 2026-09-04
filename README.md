@@ -71,6 +71,17 @@ paper. Sanity-checks whether the story generalizes from fraud to credit scoring.
 
 ## Setup
 
+**Recommended — [uv](https://docs.astral.sh/uv/)** (Linux/macOS; fetches Python 3.11, no conda needed):
+
+```bash
+uv sync                    # creates .venv with all deps (torch from the CPU wheel index)
+uv run python run_all.py   # tune -> benchmark -> analysis -> report
+```
+
+Individual stages: `uv run python -m src.tune`, `uv run python -m src.experiment`, etc.
+
+**Alternative — original Windows + Miniconda path:**
+
 Prereq: Windows 11, Miniconda not required to be pre-installed.
 
 ```powershell
