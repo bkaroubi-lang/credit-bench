@@ -31,20 +31,32 @@ agent + judge-calibration harness. Headline: a finding that did *not* replicate 
 
 ---
 
-## Longer form
+## Motivation
 
-The whole point is to answer the DL-vs-GBM question honestly: for many tabular
-datasets the difference is small and dataset-dependent, and light tuning of a
-GBM matters more than the choice between them. What separates this project
-from a Kaggle notebook:
+The debate over deep learning (DL) versus gradient-boosted machines (GBMs) on tabular data is often overstated. Large-scale benchmarks (Grinsztajn et al., 2022; Shwartz-Ziv & Armon, 2022) find that tree-based ensembles generally match or beat DL architectures on tabular tasks. Where a gap does appear, light hyperparameter tuning of the GBM is usually enough to close it.
 
-- Confidence intervals on the *pairwise deltas* between models (DeLong for AUC,
-  block bootstrap for the rest), not just point estimates per model.
-- Proper temporal cross-validation (expanding-window folds + strict held-out
-  test period at the end).
-- Calibration analysis: reliability curves + Brier score, not just discrimination.
-- SHAP contrastive analysis: where do DL representations diverge from tree-based
-  representations, and does that divergence correlate with error patterns?
+This project asks a narrower and more practical question: **in credit and payments data, where (if anywhere) does DL offer a real advantage over a well-tuned GBM?**
+
+## Methodology
+
+- **Temporal cross-validation**: train/test splits respect time ordering, which prevents look-ahead leakage and matches deployment conditions.
+- **Pairwise confidence intervals**: model differences are tested pairwise on the same folds, so we don't rely on comparing point estimates.
+- **Calibration**: models are evaluated on probability quality (reliability curves, Brier score) as well as discrimination (AUC, PR-AUC).
+- **Contrastive SHAP**: attributions are compared across the GBM models to locate where the tree ensembles disagree on feature importance. (A tree-vs-DL contrastive pass is future work — see below.)
+
+## Hypotheses vs. findings
+
+Three hypotheses going in; here is how each held up on IEEE-CIS Fraud Detection.
+
+- **Discrimination — GBMs win or tie: held.** All three tuned GBMs beat the default FT-Transformer by 6.4–7.1 AUC points (p ≈ 0); CatBoost vs XGBoost is a statistical tie (Δ 0.0015, p = 0.39).
+- **Calibration under class imbalance — DL *may* do better: refuted.** The GBMs are better calibrated too — holdout Brier 0.0209 (CatBoost) / 0.0212 (XGBoost) / 0.0213 (LightGBM) vs **0.0265** for FT-Transformer. DL won neither axis here.
+- **Tails / structural features — DL *may* win where device fingerprints or learned card embeddings matter: not tested.** The most plausible place DL could still earn its keep, and the main open question — this benchmark doesn't probe the tail or learned embeddings yet.
+
+Reported as they came out, negative findings included.
+
+## Takeaway
+
+Practical guidance for tabular financial data: a well-tuned GBM is the right default — here it won on both discrimination *and* calibration, and the choice among CatBoost / XGBoost / LightGBM is a toss-up. The case for reaching for DL rests on the tail — structural features like device fingerprints or learned card embeddings — which is exactly where this benchmark hasn't yet looked, and the main open question.
 
 ## What was built
 
@@ -186,16 +198,7 @@ way (thread count doesn't move AUC).
 Set `runtime.n_threads: null` in the config to disable and use each library's
 defaults instead.
 
-## Notes on the framing
+## References
 
-The story that makes this a portfolio piece and not a demo:
-
-1. Motivation: the DL-vs-GBM debate on tabular data is overemphasized. Cite the
-   Grinsztajn et al. (2022) benchmark, Shwartz-Ziv & Armon (2022), and the
-   generic finding that light tuning of a GBM often closes any gap.
-2. Method: proper temporal CV, pairwise CIs, calibration, contrastive SHAP.
-3. Expected finding on credit/payments: GBMs win or tie on discrimination in
-   most settings, but *may* lose on calibration in imbalanced regimes, and
-   *may* lose on the tails when structural features (device fingerprints, card
-   embeddings) matter. Honest reporting either way.
-4. Conclusion: when to reach for DL on tabular data, when not to.
+- Grinsztajn, L., Oyallon, E., & Varoquaux, G. (2022). *Why do tree-based models still outperform deep learning on typical tabular data?* NeurIPS Datasets and Benchmarks Track.
+- Shwartz-Ziv, R., & Armon, A. (2022). *Tabular data: Deep learning is not all you need.* Information Fusion, 81, 84–90.
