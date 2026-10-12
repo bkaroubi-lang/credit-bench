@@ -27,10 +27,7 @@ disagreement analysis, and honest caveats:
 
 **Companion project on LLM-agent evaluation**:
 [ap-agent](https://github.com/bkaroubi-lang/ap-agent) — a Pydantic-AI accounts-payable
-agent + judge-calibration harness. Headline: two Groq-hosted LLM judges agreed
-on Cohen's κ = 0.92 across 26 easy Q&A items; adding 10 subtle items dropped
-kappa to 0.61 and revealed the "reliable" judges were sharing bias, not
-sharing quality.
+agent + judge-calibration harness. Headline: a finding that did *not* replicate — two Groq judges showed a kappa "collapse" in July 2026, but the key judge model was later retired by Groq and re-running with a current model pair reversed it. The durable lesson (inter-judge agreement ≠ judge quality) survives, and the repo now ships a record/replay cache so results reproduce offline.
 
 ---
 
