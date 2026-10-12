@@ -6,8 +6,8 @@ A rigorous benchmark of tuned XGBoost, LightGBM, and CatBoost against a modern
 tabular DL baseline (FT-Transformer, `rtdl-revisiting-models` reference
 implementation) on IEEE-CIS Fraud Detection (~590K transactions, temporal
 holdout). All pairwise comparisons carry confidence intervals — DeLong for AUC
-deltas, block bootstrap for PR-AUC — so I can report *significance*, not just
-point estimates.
+deltas, block bootstrap for PR-AUC — so the comparisons report *significance*,
+not just point estimates.
 
 ## Results (holdout AUC, DeLong 95% CI)
 
@@ -25,9 +25,9 @@ disagreement analysis, and honest caveats:
 
 **→ [results/report.md](results/report.md)**
 
-**Companion project on LLM-agent evaluation**:
+**Related — LLM-agent evaluation**:
 [ap-agent](https://github.com/bkaroubi-lang/ap-agent) — a Pydantic-AI accounts-payable
-agent + judge-calibration harness. Headline: a finding that did *not* replicate — two Groq judges showed a kappa "collapse" in July 2026, but the key judge model was later retired by Groq and re-running with a current model pair reversed it. The durable lesson (inter-judge agreement ≠ judge quality) survives, and the repo now ships a record/replay cache so results reproduce offline.
+agent + judge-calibration harness. A finding that did *not* replicate: two Groq judges showed a kappa "collapse" in July 2026, but the key judge model was later retired by Groq and re-running with a current model pair reversed it. The durable lesson (inter-judge agreement ≠ judge quality) survives, and the repo ships a record/replay cache so results reproduce offline.
 
 ---
 
