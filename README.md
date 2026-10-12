@@ -46,25 +46,31 @@ from a Kaggle notebook:
 - SHAP contrastive analysis: where do DL representations diverge from tree-based
   representations, and does that divergence correlate with error patterns?
 
-## Phased plan
+## What was built
 
-**Phase 1 (this scaffold).** CPU-only, GBM stack.
-- IEEE-CIS Fraud Detection dataset (~600K transactions, 2017-12 to 2018-06).
+**Phase 1 — GBM stack (done).**
+- IEEE-CIS Fraud Detection dataset (~590K transactions, Dec 2017 – Jun 2018).
 - XGBoost, LightGBM, CatBoost with native categorical support.
 - Temporal CV + DeLong CIs + block bootstrap + reliability curves + SHAP.
 
-**Phase 2 (this scaffold).** torch (CPU) + `pytorch-tabular` wrappers for
-FT-Transformer, TabNet, NODE, plugged into the same TabularModel interface
-so `experiment.py`, `analysis.py`, `report.py` work identically. Runs on top
-of Phase 1 results — each DL model's holdout scores are merged into the
-existing `holdout_scores.npz`, and all pairwise CI tables are recomputed
-over the union of models present.
+**Phase 2 — tabular DL baseline (done, FT-Transformer).**
+- FT-Transformer (`rtdl-revisiting-models`, paper-default kwargs, no tuning),
+  plugged into the same interface so `experiment.py` / `analysis.py` /
+  `report.py` work identically. Its holdout scores merge into
+  `holdout_scores.npz` and all pairwise CI tables recompute over the union of
+  models — that's how the headline table above was produced.
+- CPU proved non-viable for the DL leg (~2.1 hr/epoch), so FT-Transformer ran
+  on an AMD RX 6900 XT via `torch-directml`, after a pivot off PyTorch Lightning
+  (which has no DirectML backend) to a custom training loop. Full story and the
+  preserved CPU checkpoint caveat are in the report.
 
-**Phase 3 (optional).** Swap CPU torch for `torch-directml` (Windows/AMD) if the
-DL leg is worth accelerating.
-
-**Second dataset.** Home Credit Default Risk, once IEEE-CIS conclusions are on
-paper. Sanity-checks whether the story generalizes from fraud to credit scoring.
+**Not done (honest scope / next passes).**
+- DL leg was trained on a 100K-tail subsample at default hyperparameters — a
+  full-data, Optuna-tuned DL run is the obvious next step (the report argues it
+  is unlikely to close the ~6 AUC-point gap, but it is untested).
+- TabNet / NODE wrappers exist in the interface but were not run.
+- A second dataset (Home Credit Default Risk) to test whether the story
+  generalizes from fraud to credit scoring.
 
 ## Setup
 
